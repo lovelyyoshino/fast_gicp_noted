@@ -14,7 +14,7 @@
 namespace fast_gicp {
 
 /**
- * @brief Fast GICP algorithm optimized for multi threading with OpenMP
+ * @brief Fast GICP algorithm optimized for multi threading with OpenMP，这里是FastGICP类的声明，需要传入PointSource和PointTarget：https://www.cnblogs.com/Sharemaker/p/16967748.html
  */
 template<typename PointSource, typename PointTarget, typename SearchMethodSource = pcl::search::KdTree<PointSource>, typename SearchMethodTarget = pcl::search::KdTree<PointTarget>>
 class FastGICP : public LsqRegistration<PointSource, PointTarget> {

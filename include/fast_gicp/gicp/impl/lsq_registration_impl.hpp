@@ -66,7 +66,7 @@ void LsqRegistration<PointTarget, PointSource>::computeTransformation(PointCloud
     nr_iterations_ = i;
 
     Eigen::Isometry3d delta;
-    if (!step_optimize(x0, delta)) {
+    if (!step_optimize(x0, delta)) {//每一步优化迭代信息
       std::cerr << "lm not converged!!" << std::endl;
       break;
     }
@@ -94,7 +94,7 @@ template <typename PointTarget, typename PointSource>
 bool LsqRegistration<PointTarget, PointSource>::step_optimize(Eigen::Isometry3d& x0, Eigen::Isometry3d& delta) {
   switch (lsq_optimizer_type_) {
     case LSQ_OPTIMIZER_TYPE::LevenbergMarquardt:
-      return step_lm(x0, delta);
+      return step_lm(x0, delta);//Levenberg-Marquardt优化
     case LSQ_OPTIMIZER_TYPE::GaussNewton:
       return step_gn(x0, delta);
   }
@@ -123,10 +123,10 @@ template <typename PointTarget, typename PointSource>
 bool LsqRegistration<PointTarget, PointSource>::step_lm(Eigen::Isometry3d& x0, Eigen::Isometry3d& delta) {
   Eigen::Matrix<double, 6, 6> H;
   Eigen::Matrix<double, 6, 1> b;
-  double y0 = linearize(x0, &H, &b);
+  double y0 = linearize(x0, &H, &b);//通过x信息，线性化设置H和b
 
   if (lm_lambda_ < 0.0) {
-    lm_lambda_ = lm_init_lambda_factor_ * H.diagonal().array().abs().maxCoeff();
+    lm_lambda_ = lm_init_lambda_factor_ * H.diagonal().array().abs().maxCoeff();//初始化lambda,这里会拿到H的最大值
   }
 
   double nu = 2.0;
@@ -137,7 +137,7 @@ bool LsqRegistration<PointTarget, PointSource>::step_lm(Eigen::Isometry3d& x0, E
     delta = se3_exp(d);
 
     Eigen::Isometry3d xi = delta * x0;
-    double yi = compute_error(xi);
+    double yi = compute_error(xi);//然后根据差值信息来完成迭代优化
     double rho = (y0 - yi) / (d.dot(lm_lambda_ * d - b));
 
     if (lm_debug_print_) {

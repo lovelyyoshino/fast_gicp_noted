@@ -13,12 +13,12 @@ namespace fast_gicp {
 enum class LSQ_OPTIMIZER_TYPE { GaussNewton, LevenbergMarquardt };
 
 template<typename PointSource, typename PointTarget>
-class LsqRegistration : public pcl::Registration<PointSource, PointTarget, float> {
+class LsqRegistration : public pcl::Registration<PointSource, PointTarget, float> {//继承pcl的Registration类
 public:
   using Scalar = float;
   using Matrix4 = typename pcl::Registration<PointSource, PointTarget, Scalar>::Matrix4;
 
-  using PointCloudSource = typename pcl::Registration<PointSource, PointTarget, Scalar>::PointCloudSource;
+  using PointCloudSource = typename pcl::Registration<PointSource, PointTarget, Scalar>::PointCloudSource;//使用pcl::Registration来表示点云配准中源点云的类型
   using PointCloudSourcePtr = typename PointCloudSource::Ptr;
   using PointCloudSourceConstPtr = typename PointCloudSource::ConstPtr;
 
